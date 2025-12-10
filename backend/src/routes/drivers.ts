@@ -5,6 +5,7 @@ const router = new Router({
   prefix: "/drivers",
 });
 
+//Get all drivers
 router.get("/", async (ctx) => {
   try {
     ctx.body = drivers;
@@ -15,6 +16,7 @@ router.get("/", async (ctx) => {
   }
 });
 
+//Get driver by ID
 router.get("/:driverId", async (ctx) => {
   try {
     const driver = drivers.find((d) => d.driverId === ctx.params.driverId);
@@ -28,6 +30,26 @@ router.get("/:driverId", async (ctx) => {
   } catch (error) {
     ctx.status = 500;
     ctx.body = { message: "Internal Server Error" };
+  }
+});
+
+//Get country by driver
+router.get("/country/:country", async (ctx) => {
+  try {
+    const nation = ctx.params.country.toLowerCase();
+    const filteredDrivers = drivers.filter(
+      (d) => d.country.toLowerCase() === nation
+    );
+    if (filteredDrivers.length === 0) {
+      ctx.status = 404;
+      ctx.body = { message: "Nessun pilota trovato per questa nazione" };
+      return;
+    }
+    ctx.status = 200;
+    ctx.body = filteredDrivers;
+  } catch (error) {
+    ctx.status = 500;
+    ctx.body = { message: "Errore nel server" };
   }
 });
 
