@@ -1,12 +1,16 @@
 import Router from "@koa/router";
 import { teams } from "../mocks/teams";
+import TeamsDao from "../dao/teams.dao";
 
 const router = new Router({
   prefix: "/teams",
 });
 
+const teamsDao = new TeamsDao();
+
 router.get("/", async (ctx) => {
   try {
+    const teams = await teamsDao.getAll();
     ctx.body = teams;
     ctx.status = 200;
   } catch (error) {
@@ -17,9 +21,8 @@ router.get("/", async (ctx) => {
 
 router.get("/:teamId", async (ctx) => {
   try {
-    const team = teams.find(
-      (d) => d.teamId.toLowerCase() === ctx.params.teamId
-    );
+    const { teamId } = ctx.params;
+    const team = await teamsDao.getById(teamId);
     if (!team) {
       ctx.status = 404;
       ctx.body = { message: "Team not found" };

@@ -4,10 +4,13 @@ import dotenv from "dotenv";
 import driverRoutes from "./routes/drivers";
 import trackRoutes from "./routes/tracks";
 import teamRoutes from "./routes/teams";
+import { dbClient } from "./lib/db";
 
 dotenv.config();
 const app = new Koa();
 const router = new Router();
+
+dbClient();
 
 router.get("/", (ctx) => {
   ctx.body = "Formula1";
