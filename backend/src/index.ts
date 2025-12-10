@@ -5,12 +5,20 @@ import driverRoutes from "./routes/drivers";
 import trackRoutes from "./routes/tracks";
 import teamRoutes from "./routes/teams";
 import { dbClient } from "./lib/db";
+import cors from "@koa/cors";
+
 
 dotenv.config();
 const app = new Koa();
 const router = new Router();
 
 dbClient();
+
+app.use(
+  cors({
+    origin: process.env.FRONTEND_DOMAIN,
+  }),
+);
 
 router.get("/", (ctx) => {
   ctx.body = "Formula1";
