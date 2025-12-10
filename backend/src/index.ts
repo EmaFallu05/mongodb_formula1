@@ -1,17 +1,26 @@
 import Koa from "koa";
 import Router from "@koa/router";
 import dotenv from "dotenv";
+import driverRoutes from "./routes/drivers";
+import trackRoutes from "./routes/tracks";
+import teamRoutes from "./routes/teams";
 
 dotenv.config();
 const app = new Koa();
 const router = new Router();
 
 router.get("/", (ctx) => {
-  ctx.body = "Hello from Koa + TypeScript!";
-});
+  ctx.body = "Formula1";
+}); 
 
 app.use(router.routes());
 app.use(router.allowedMethods());
+app.use(driverRoutes.routes());
+app.use(driverRoutes.allowedMethods());
+app.use(trackRoutes.routes());
+app.use(trackRoutes.allowedMethods());
+app.use(teamRoutes.routes());
+app.use(teamRoutes.allowedMethods());
 
 const port = process.env.BACKEND_PORT;
 
